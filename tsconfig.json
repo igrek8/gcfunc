@@ -1,4 +1,5 @@
 {
   "extends": "@igrek8/tsconfig/common.json",
+  "compilerOptions": { "outDir": "dist", "lib": ["DOM", "es2020"] },
   "include": ["src"]
 }
