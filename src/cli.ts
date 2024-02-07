@@ -22,7 +22,7 @@ const version = packageJSON.version;
 interface Options {
   function: string;
   project: string;
-  data?: Promise<RequestInit>;
+  data?: Promise<RequestInit & { pathname?: string; search?: string }>;
   envFile?: string;
 }
 
@@ -105,7 +105,10 @@ program
     server.once('listening', async () => {
       const addr = server.address();
       assert(addr && typeof addr === 'object');
-      await fetch(`http://127.0.0.1:${addr.port}`, { method: 'POST', ...config });
+      const url = new URL(`http://127.0.0.1:${addr.port}`);
+      if (config?.pathname) url.pathname = config.pathname;
+      if (config?.search) url.search = config.search;
+      await fetch(url, { method: 'POST', ...config });
     });
 
     server.setTimeout(0);
